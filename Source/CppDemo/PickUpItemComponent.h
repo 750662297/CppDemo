@@ -4,14 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "Components/SphereComponent.h"
-#include "CFPSCharacter.h"
+#include "IMyCharacter.h"
 
 #include "PickUpItemComponent.generated.h"
 
 /**
  * 掉落物，奖励等基类
  */
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPickUp, ACFPSCharacter*, PickUpCharacter);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPickUp, AIMyCharacter*, PickUpCharacter);
 
 UCLASS(Blueprintable, BlueprintType, ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class CPPDEMO_API UPickUpItemComponent : public USphereComponent

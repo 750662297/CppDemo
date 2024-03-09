@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/SkeletalMeshComponent.h" 
-#include "CFPSCharacter.h"
+#include "IMyCharacter.h"
 #include "Projectile.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -13,6 +13,8 @@
 /**
  *武器类
  */
+DECLARE_DELEGATE(FWeaponAfterFire)
+
 UCLASS(Blueprintable, BlueprintType, ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class CPPDEMO_API UWeaponComponent : public USkeletalMeshComponent
 {
@@ -20,6 +22,11 @@ class CPPDEMO_API UWeaponComponent : public USkeletalMeshComponent
 
 public:
     UWeaponComponent();
+
+public:
+    FWeaponAfterFire OnWeaponAfterFire;
+
+    int GetBulletNumber() { return BulletNumber; }
 
 public:
     //发射物
@@ -40,7 +47,7 @@ public:
 
     //捡起武器
     UFUNCTION(BlueprintCallable, Category = "Weapon")
-        void AttackWeapon(ACFPSCharacter* TargetCharacter);
+        void AttackWeapon(AIMyCharacter* TargetCharacter);
 
 protected:
     //武器上下文
@@ -90,7 +97,7 @@ protected:
     bool HasBullet();
 
 private:
-    ACFPSCharacter* Character;
+    AIMyCharacter* Character;
 
     bool bIsFiring = false;
     bool bAllowDartle = false; //是否允许连射

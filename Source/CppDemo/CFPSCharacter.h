@@ -10,8 +10,11 @@
 #include "InputActionValue.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+//#include "WeaponComponent.h"
 
 #include "CFPSCharacter.generated.h"
+
+class UWeaponComponent;
 
 UCLASS(config = Game)
 class CPPDEMO_API ACFPSCharacter : public ACharacter
@@ -58,13 +61,6 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPreserveRatio = "true"))
         UInputAction* ProneAction;
 
-
-    /*射击操作相关*/
-
-    //枪口相对于摄像机位置的偏移
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
-        FVector MuzzleOffset;
-
     //武器相关设置
     UFUNCTION(BlueprintCallable, Category = Weapon)
         bool GetHasRifle() { return isHasRifle; }
@@ -89,6 +85,11 @@ public:
 
 
     USkeletalMeshComponent* GetFPSMesh() { return FpsMesh; }
+
+
+    //武器
+    void SetWeapon(UWeaponComponent* component) { Weapon = component; }
+    UWeaponComponent* GetWeapon() { return Weapon; }
 
 protected:
     // Called when the game starts or when spawned
@@ -136,4 +137,6 @@ private:
     bool isHasRifle = false;
     bool isCrouching = false; //蹲下
     bool isProne = false; //趴下
+
+    UWeaponComponent* Weapon = nullptr;
 };

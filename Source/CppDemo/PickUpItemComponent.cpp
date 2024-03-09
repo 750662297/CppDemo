@@ -18,7 +18,7 @@ void UPickUpItemComponent::BeginPlay()
 
 void UPickUpItemComponent::OnSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-    ACFPSCharacter* Character = Cast<ACFPSCharacter>(OtherActor);
+    AIMyCharacter* Character = Cast<AIMyCharacter>(OtherActor);
     if (OtherActor == nullptr)
     {
         return;

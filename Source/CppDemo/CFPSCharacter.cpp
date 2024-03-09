@@ -69,7 +69,8 @@ void ACFPSCharacter::Init()
     ThirdCameraComp->bUsePawnControlRotation = false;
 
     //设置初始视角
-    CameraToFirst();
+    //CameraToFirst();
+    CameraToThird();
 }
 
 // Called when the game starts or when spawned
@@ -87,6 +88,8 @@ void ACFPSCharacter::BeginPlay()
 
     //所属玩家看不到常规（第三人称）全身网格体
     GetMesh()->SetOwnerNoSee(true);
+
+    CameraToThird();
 }
 
 // Called every frame
@@ -236,3 +239,4 @@ void ACFPSCharacter::StopProne()
 {
     isProne = false;
 }
+

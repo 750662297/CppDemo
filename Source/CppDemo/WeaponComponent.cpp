@@ -30,7 +30,7 @@ void UWeaponComponent::EndPlay(const EEndPlayReason::Type EEndPlayReason)
     }
 }
 
-void UWeaponComponent::AttackWeapon(ACFPSCharacter* TargetCharacter)
+void UWeaponComponent::AttackWeapon(AIMyCharacter* TargetCharacter)
 {
     if (TargetCharacter == nullptr || TargetCharacter->GetHasRifle())
     {
@@ -39,9 +39,10 @@ void UWeaponComponent::AttackWeapon(ACFPSCharacter* TargetCharacter)
 
     Character = TargetCharacter;
 
+    Character->SetWeapon(this);
     //设置附加规则
     FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
-    AttachToComponent(Character->GetFPSMesh(), AttachmentRules, FName(TEXT("GripPoint")));
+    Character->AfterAttackWeapon(this, AttachmentRules);
 
     Character->SetHasRifle(true);
 
@@ -75,6 +76,9 @@ void UWeaponComponent::Fire()
         return;
     }
 
+    auto target = GetOwner();
+    GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, target->GetName());
+
     //试图发射发射物
     if (ProjectileClass)
     {
@@ -100,14 +104,7 @@ void UWeaponComponent::Fire()
         UGameplayStatics::PlaySoundAtLocation(this, FireSound, Character->GetActorLocation(), Character->GetActorRotation());
     }
 
-    if (FireAnimation != nullptr)
-    {
-        UAnimInstance* AnimInstance = Character->GetFPSMesh()->GetAnimInstance();
-        if (AnimInstance != nullptr)
-        {
-            AnimInstance->Montage_Play(FireAnimation, 1.f);
-        }
-    }
+    OnWeaponAfterFire.ExecuteIfBound();
 }
 
 void UWeaponComponent::StartFire()
