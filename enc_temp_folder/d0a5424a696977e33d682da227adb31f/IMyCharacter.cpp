@@ -9,14 +9,12 @@ AIMyCharacter::AIMyCharacter()
     // Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
     PrimaryActorTick.bCanEverTick = true;
 
-    //GetCharacterMovement()->bWantsToCrouch = true;
 }
 
 // Called when the game starts or when spawned
 void AIMyCharacter::BeginPlay()
 {
     Super::BeginPlay();
-    GetCharacterMovement()->GetNavAgentPropertiesRef().bCanCrouch = true;
 
     //添加增强输入系统的映射
     auto PlayerController = Cast<APlayerController>(Controller);
@@ -154,8 +152,8 @@ void AIMyCharacter::StartCrouch()
         return;
     }
 
-    IsCrouching ? AIMyCharacter::UnCrouch() : AIMyCharacter::Crouch();
-    IsCrouching = !IsCrouching;
+    IsCrouch ? AIMyCharacter::UnCrouch() : AIMyCharacter::Crouch();
+    IsCrouch = !IsCrouch;
 }
 
 void AIMyCharacter::StopCrouch()

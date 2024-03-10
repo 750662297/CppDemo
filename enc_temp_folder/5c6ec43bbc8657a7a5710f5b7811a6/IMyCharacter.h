@@ -118,7 +118,7 @@ private:
     bool IsHasRifle = false;
     bool IsProne = false; //趴下
     bool IsRunning = false;
-    bool IsCrouching = false;
+    bool IsCrouch = false;
 
     float CurrentSpeed = 0.0f;
     float MaxSpeed = 662.0f;
