@@ -8,7 +8,7 @@
 
 AFPSHUD::AFPSHUD()
 {
-    static ConstructorHelpers::FClassFinder<UUserWidget>WidgetClass(TEXT("WidgetBlueprint'/Game/UI/HUD_AmmonCount.HUD_AmmonCount_C'"));
+    static ConstructorHelpers::FClassFinder<UUserWidget>WidgetClass(TEXT("WidgetBlueprint'/Game/UI/HUD/HUD_AmmonCount.HUD_AmmonCount_C'"));
     if (WidgetClass.Succeeded())
     {
         AmmoCoundWidgetClass = WidgetClass.Class;

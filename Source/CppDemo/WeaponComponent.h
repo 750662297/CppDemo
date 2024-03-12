@@ -14,6 +14,7 @@
  *武器类
  */
 DECLARE_DELEGATE(FWeaponAfterFire)
+DECLARE_DELEGATE_TwoParams(FWeaponHolstered, bool, const FAttachmentTransformRules&)
 
 UCLASS(Blueprintable, BlueprintType, ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class CPPDEMO_API UWeaponComponent : public USkeletalMeshComponent
@@ -25,6 +26,7 @@ public:
 
 public:
     FWeaponAfterFire OnWeaponAfterFire;
+    FWeaponHolstered OnWeaponHolstered; //武器被收起或拿出
 
     int GetBulletNumber() { return BulletNumber; }
 
@@ -70,6 +72,10 @@ protected:
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
         class UInputAction* ReloadAction;
 
+    //  收起武器
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+        class UInputAction* HolsteredAction;
+
 
 
     UFUNCTION()
@@ -96,11 +102,14 @@ protected:
 
     bool HasBullet();
 
+    void HolsteredWeapon();
+
 private:
     AIMyCharacter* Character;
 
     bool bIsFiring = false;
     bool bAllowDartle = false; //是否允许连射
+    bool bIsHolstered = false; //是否被收起
 
     FTimerHandle FireTimerHandle;
 

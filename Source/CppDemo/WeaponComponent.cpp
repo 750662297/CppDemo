@@ -58,9 +58,10 @@ void UWeaponComponent::AttackWeapon(AIMyCharacter* TargetCharacter)
         {
             EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Triggered, this, &UWeaponComponent::StartFire);
             EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Completed, this, &UWeaponComponent::StopFire);
-            //EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Triggered, this, &UWeaponComponent::Fire);
             EnhancedInputComponent->BindAction(SwitchDartleAction, ETriggerEvent::Triggered, this, &UWeaponComponent::SwitchDartle);
             EnhancedInputComponent->BindAction(ReloadAction, ETriggerEvent::Triggered, this, &UWeaponComponent::Reload);
+
+            EnhancedInputComponent->BindAction(HolsteredAction, ETriggerEvent::Triggered, this, &UWeaponComponent::HolsteredWeapon);
         }
     }
 }
@@ -76,9 +77,6 @@ void UWeaponComponent::Fire()
         return;
     }
 
-    auto target = GetOwner();
-    GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, target->GetName());
-
     //试图发射发射物
     if (ProjectileClass)
     {
@@ -86,7 +84,6 @@ void UWeaponComponent::Fire()
         if (World)
         {
             APlayerController* PlayerController = Cast<APlayerController>(Character->GetController());
-            //const FRotator Rotation = PlayerController->PlayerCameraManager->GetCameraRotation();
 
             const FRotator Rotation = Character->GetActorRotation();
             const FVector Location = GetOwner()->GetActorLocation() + Rotation.RotateVector(MuzzleOffset);
@@ -167,4 +164,16 @@ bool UWeaponComponent::HasBullet()
     //处理空仓时的音效
 
     return false;
+}
+
+void UWeaponComponent::HolsteredWeapon()
+{
+    if (Character == nullptr || Character->GetController() == nullptr)
+    {
+        return;
+    }
+
+    FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
+    OnWeaponHolstered.ExecuteIfBound(!bIsHolstered, AttachmentRules);
+    bIsHolstered = !bIsHolstered;
 }

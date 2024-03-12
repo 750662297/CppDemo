@@ -3,6 +3,16 @@
 
 #include "FPSPlayerController.h"
 #include "EnhancedInputSubsystems.h"
+#include "EnhancedInputComponent.h"
+
+AFPSPlayerController::AFPSPlayerController()
+{
+    static ConstructorHelpers::FClassFinder<UUserWidget>WidgetClass(TEXT("WidgetBlueprint'/Game/UI/UMG/UMG_MainMenu.UMG_MainMenu_C'"));
+    if (WidgetClass.Succeeded())
+    {
+        MenuWidgetClass = WidgetClass.Class;
+    }
+}
 
 void AFPSPlayerController::BeginPlay()
 {
@@ -13,7 +23,28 @@ void AFPSPlayerController::BeginPlay()
     {
         Subsystem->AddMappingContext(InputMappingContext, 0);
 
+        UEnhancedInputComponent* EnhancedInputCom = Cast<UEnhancedInputComponent>(InputComponent);
+        EnhancedInputCom->BindAction(PauseGameAction, ETriggerEvent::Triggered, this, &AFPSPlayerController::PauseGame);
+
         UE_LOG(LogTemp, Warning, TEXT("BeginPlay"));
     }
 }
 
+void AFPSPlayerController::PauseGame()
+{
+    //SetGamePause()
+    if (MenuWidgetClass)
+    {
+        MenuWidgetInstance = CreateWidget<UUserWidget>(GetWorld(), MenuWidgetClass);
+        if (MenuWidgetInstance)
+        {
+            MenuWidgetInstance->AddToViewport();
+
+            FInputModeGameAndUI InputModeData;
+            SetInputMode(InputModeData);
+            SetShowMouseCursor(true);
+
+            SetPause(true);
+        }
+    }
+}

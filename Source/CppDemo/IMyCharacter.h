@@ -73,16 +73,38 @@ public:
 
 
     //武器
-    void SetWeapon(UWeaponComponent* component) { Weapon = component; }
-    UWeaponComponent* GetWeapon() { return Weapon; }
+    void SetWeapon(UWeaponComponent* component) { Weapon01 = component; }
+    UWeaponComponent* GetWeapon() { return Weapon01; }
 
     virtual void AfterAttackWeapon(UWeaponComponent* TargetWeapon, const FAttachmentTransformRules& Rules, bool other = false) {}
+    virtual void HolsteredWeapon(bool IsPackUp, const FAttachmentTransformRules& Rules) {}
+
+    UFUNCTION(BlueprintCallable, Category = Weapon)
+        bool IsHolsteredWeapon()
+    {
+        return bIsHolsteredWeapon;
+    }
+
+    void SetIsHolsteredWeapon(bool Value) { bIsHolsteredWeapon = Value; }
+
 
 protected:
     // Called when the game starts or when spawned
     virtual void BeginPlay() override;
 
 protected:
+    enum class Enum_Run_Mode :uint8
+    {
+        PRESS_KEEP_RUN = 1, //按住保持奔跑
+        SWITCH_RUN //按下切换奔跑
+    };
+
+    enum class Enum_Crouch_Mode :uint8
+    {
+        PRESS_KEEP_CROUCH = 1,
+        SWITCH_CROUCH
+    };
+
     void Init();
 
     //增强输入的移动，转视角
@@ -101,24 +123,20 @@ protected:
 
     virtual void ChangeSpeed(bool ToRunning = false);
 
+    void SetRunMode(Enum_Run_Mode Mode) { RunMode = Mode; }
+
+    Enum_Run_Mode GetRunMode() { return RunMode; }
+
+    void SetCrouchMode(Enum_Crouch_Mode Mode) { CrouchMode = Mode; }
+    Enum_Crouch_Mode GetCrouchMode() { return CrouchMode; }
+
 private:
-    enum class Enum_Run_Mode
-    {
-        PRESS_KEEP_RUN, //按住保持奔跑
-        SWITCH_RUN //按下切换奔跑
-    };
-
-    enum class Enum_Crouch_Mode
-    {
-        PRESS_KEEP_CROUCH,
-        SWITCH_CROUCH
-    };
-
     bool IsFirstCamera = true;
     bool IsHasRifle = false;
     bool IsProne = false; //趴下
     bool IsRunning = false;
     bool IsCrouching = false;
+    bool bIsHolsteredWeapon = true;
 
     float CurrentSpeed = 0.0f;
     float MaxSpeed = 662.0f;
@@ -128,7 +146,7 @@ private:
     Enum_Crouch_Mode CrouchMode = Enum_Crouch_Mode::PRESS_KEEP_CROUCH;
 
 
-    UWeaponComponent* Weapon = nullptr;
+    UWeaponComponent* Weapon01 = nullptr;
 
 
 };
