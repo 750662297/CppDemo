@@ -27,6 +27,8 @@ public:
     virtual void DrawHUD() override;
     virtual void BeginPlay() override;
 
+    void SetHide(bool IsHide);
+
 protected:
     //将被绘制在屏幕中心
     UPROPERTY(EditDefaultsOnly)
@@ -43,5 +45,5 @@ protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "HUD")
         UTextBlock* BulletText;
 
-
+    UUserWidget* GetInstance();
 };

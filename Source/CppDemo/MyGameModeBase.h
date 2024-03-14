@@ -14,6 +14,10 @@ class CPPDEMO_API AMyGameModeBase : public AGameModeBase
 {
     GENERATED_BODY()
 
+public:
+    UFUNCTION(BlueprintCallable)
+        void HandleGameOver();
+
 protected:
     virtual void StartPlay() override;
 };

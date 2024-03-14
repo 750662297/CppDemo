@@ -1,4 +1,5 @@
 ﻿#include "ThirdViewCharacter.h"
+#include "GameFramework/PlayerState.h"
 
 // 设置默认值
 AThirdViewCharacter::AThirdViewCharacter()

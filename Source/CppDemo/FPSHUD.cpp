@@ -19,20 +19,12 @@ void AFPSHUD::BeginPlay()
 {
     Super::BeginPlay();
 
-    if (AmmoCoundWidgetClass)
-    {
-        AmmoCountWidgetInstance = CreateWidget<UUserWidget>(GetWorld(), AmmoCoundWidgetClass);
-
-        if (AmmoCountWidgetInstance)
-        {
-            AmmoCountWidgetInstance->AddToViewport();
-        }
-    }
-
-    if (AmmoCountWidgetInstance == nullptr)
+    if (GetInstance() == nullptr)
     {
         return;
     }
+
+    GetInstance()->AddToViewport();
 
     HealthText = Cast<UTextBlock>(AmmoCountWidgetInstance->GetWidgetFromName(TEXT("TextHealth")));
     BulletText = Cast<UTextBlock>(AmmoCountWidgetInstance->GetWidgetFromName(TEXT("TextBullet")));
@@ -77,6 +69,36 @@ void AFPSHUD::DrawHUD()
 
 }
 
+UUserWidget* AFPSHUD::GetInstance()
+{
+    if (AmmoCoundWidgetClass == nullptr)
+    {
+        return nullptr;
+    }
 
+    if (AmmoCountWidgetInstance == nullptr)
+    {
+        AmmoCountWidgetInstance = CreateWidget<UUserWidget>(GetWorld(), AmmoCoundWidgetClass);
+    }
+
+    return AmmoCountWidgetInstance;
+}
+
+void AFPSHUD::SetHide(bool IsHide)
+{
+    if (GetInstance() == nullptr)
+    {
+        return;
+    }
+    if (IsHide)
+    {
+        GetInstance()->RemoveFromParent();
+
+    }
+    else
+    {
+        GetInstance()->AddToViewport();
+    }
+}
 
 
